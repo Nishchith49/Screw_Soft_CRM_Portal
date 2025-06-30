@@ -1,0 +1,75 @@
+<div class="courses-container">
+  <div class="header">
+    <div class="header-left">
+      <div class="page-title">
+        <h2>Courses</h2>
+      </div>
+      <div class="breadcrumb">
+        <span><a routerLink="/admin/dashboard">Home</a></span>
+        <span class="separator">/</span>
+        <span>Courses</span>
+      </div>
+    </div>
+    <form [formGroup]="filterForm" class="header-right">
+      <input type="text" placeholder="Search..." class="search-input" formControlName="searchString" />
+      <button class="add-button" routerLink="/admin/courses/add">Add</button>
+    </form>
+  </div>
+
+  <div *ngIf="isLoadingData" class="loading-page-ui" fxLayoutAlign="center center">
+    <app-loading-page></app-loading-page>
+  </div>
+
+  <div *ngIf="isError && !isLoadingData" class="error-page-ui">
+    <app-error-page [errorData]="errorData"></app-error-page>
+  </div>
+
+  <div *ngIf="!isLoadingData && !isError" class="table-wrapper">
+    <table class="course-table">
+      <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Duration In Weeks</th>
+          <th>Created Date</th>
+          <th>Updated Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of courses; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ course.title }}</td>
+          <td>{{ course.description }}</td>
+          <td>{{ course.durationInWeeks }}</td>
+          <td>{{ course.createdDate | date}}</td>
+          <td>{{ course.lastUpdatedDate | date}}</td>
+          <td>
+            <label class="switch">
+              <input type="checkbox" [checked]="course.isActive" (change)="enableOrDisableCourse(course.id!)">
+              <span class="slider"></span>
+            </label>
+          </td>
+          <td><button class="edit-button" (click)="editCourseDetails(course.id)">Edit</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="paginator-wrapper" *ngIf="totalRecords > pageSize">
+    <div class="pagination-controls">
+      <label>Items per page:</label>
+      <select [value]="pageSize" (change)="onPageSizeChange($event)">
+        <option *ngFor="let size of [10, 20, 30, 50]" [value]="size">{{ size }}</option>
+      </select>
+
+      <span>{{ pageNumber * pageSize + 1 }} - {{ getEndItemIndex() }} of {{ totalRecords }}</span>
+
+      <button (click)="goToFirstPage()" [disabled]="pageNumber === 0">&laquo;</button>
+      <button (click)="goToPreviousPage()" [disabled]="pageNumber === 0">&lsaquo;</button>
+      <button (click)="goToNextPage()" [disabled]="pageNumber + 1 >= totalPages">&rsaquo;</button>
+      <button (click)="goToLastPage()" [disabled]="pageNumber + 1 >= totalPages">&raquo;</button>
+    </div>
+  </div>
+</div>

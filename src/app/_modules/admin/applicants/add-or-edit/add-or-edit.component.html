@@ -1,0 +1,56 @@
+<div class="applicant-form">
+    <h2 class="title">{{applicantId ? 'Edit' : 'Add'}} Applicant</h2>
+    <div class="breadcrumb">
+        <span><a routerLink="/admin/dashboard">Home</a></span>
+        <span>/</span>
+        <span><a routerLink="/admin/applicants/list">Applicants</a></span>
+        <span>/</span>
+        <span>{{applicantId ? 'Edit' : 'Add'}} Applicant</span>
+    </div>
+
+    <div class="form">
+        <form [formGroup]="addOrEditApplicantForm" (ngSubmit)="onSubmit()">
+            <div class="form-group" *ngFor="let field of [
+                { name: 'jobId', label: 'Job' },
+                { name: 'fullName', label: 'Full Name' },
+                { name: 'email', label: 'Email', type: 'email' },
+                { name: 'phone', label: 'Phone Number', type: 'number' },
+                { name: 'resumeUrl', label: 'Resume URL' },
+                { name: 'skills', label: 'Skills' },
+                { name: 'experience', label: 'Experience (Years)', type: 'number' },
+                ]">
+                <div *ngIf="field.name !== 'jobId'; else jobDropDown">
+                    <label [for]="field.name">{{ field.label }}<span class="text-warn">*</span></label>
+                    <input [type]="field.type || 'text'" [formControlName]="field.name" [id]="field.name"
+                        class="form-control" />
+                    <span *ngIf="f.get(field.name)?.errors?.['required'] && f.get(field.name)?.touched">
+                        {{ field.label }} is required.
+                    </span>
+                    <span
+                        *ngIf="field.name === 'email' && f.get('email')?.errors?.['email'] && f.get('email')?.touched">
+                        Enter a valid email address.
+                    </span>
+                    <span
+                        *ngIf="field.name === 'phone' && f.get('phone')?.errors?.['pattern'] && f.get('phone')?.touched">
+                        Enter a valid 10-digit phone number.
+                    </span>
+                    <span
+                        *ngIf="field.name === 'experience' && f.get('experience')?.errors?.['min'] && f.get('experience')?.touched">
+                        Experience must be 0 or more.
+                    </span>
+                </div>
+
+                <ng-template #jobDropDown>
+                    <label [for]="field.name">{{field.label}}<span class="text-warn">*</span></label>
+                    <select [formControlName]="field.name">
+                        <option value="" disabled selected>Select Job</option>
+                        <option *ngFor="let job of jobs" [value]="job.id">
+                            {{job.jobTitle}}</option>
+                    </select>
+                </ng-template>
+
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>

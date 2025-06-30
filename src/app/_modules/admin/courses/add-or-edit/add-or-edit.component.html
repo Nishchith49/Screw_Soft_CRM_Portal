@@ -1,0 +1,40 @@
+<div class="course-form">
+    <h2 class="title">{{courseId ? 'Edit' : 'Add'}} Course</h2>
+    <div class="breadcrumb">
+        <span><a routerLink="/admin/dashboard">Home</a></span>
+        <span>/</span>
+        <span><a routerLink="/admin/courses/list">Courses</a></span>
+        <span>/</span>
+        <span>{{courseId ? 'Edit' : 'Add'}} Course</span>
+    </div>
+
+    <div class="form">
+        <form [formGroup]="addOrEditCourseForm" (ngSubmit)="onSubmit()">
+            <div class="form-group" *ngFor="let field of [
+                { name: 'title', label: 'Title' },
+                { name: 'description', label: 'Description' },
+                { name: 'durationInWeeks', label: 'Duration In Weeks', type: 'number' },
+                ]">
+                <label [for]="field.name">{{ field.label }}<span class="text-warn">*</span></label>
+                <ng-container *ngIf="field.name !== 'description'; else richTextEditor">
+                    <input [type]="field.type || 'text'" [formControlName]="field.name" [id]="field.name"
+                        class="form-control" />
+                </ng-container>
+                <ng-template #richTextEditor>
+                    <div class="editor-wrapper">
+                        <ngx-editor [editor]="editor" [formControlName]="field.name"
+                            [placeholder]="'Enter course description here...'" class="editor">
+                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                            <hr />
+                        </ngx-editor>
+                    </div>
+                </ng-template>
+                <span *ngIf="f.get(field.name)?.errors?.['required'] && f.get(field.name)?.touched">
+                    {{ field.label }} is required.
+                </span>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>

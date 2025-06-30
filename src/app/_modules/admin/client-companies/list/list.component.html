@@ -1,0 +1,79 @@
+<div class="client-companies-container">
+  <div class="header">
+    <div class="header-left">
+      <div class="page-title">
+        <h2>Client Company Details</h2>
+      </div>
+      <div class="breadcrumb">
+        <span><a routerLink="/admin/dashboard">Home</a></span>
+        <span class="separator">/</span>
+        <span>Client Companies</span>
+      </div>
+    </div>
+    <form [formGroup]="filterForm" class="header-right">
+      <input type="text" placeholder="Search..." class="search-input" formControlName="searchString" />
+      <button class="add-button" routerLink="/admin/client-companies/add">Add</button>
+    </form>
+  </div>
+
+  <div *ngIf="isLoadingData" class="loading-page-ui" fxLayoutAlign="center center">
+    <app-loading-page></app-loading-page>
+  </div>
+
+  <div *ngIf="isError && !isLoadingData" class="error-page-ui">
+    <app-error-page [errorData]="errorData"></app-error-page>
+  </div>
+
+  <div *ngIf="!isLoadingData && !isError" class="table-wrapper">
+    <table class="company-table">
+      <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>Company Name</th>
+          <th>Contact Person Name</th>
+          <th>Designation</th>
+          <th>Contact Email</th>
+          <th>Phone Number</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let company of clientCompanies; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ company.companyName }}</td>
+          <td>{{ company.contactPersonName }}</td>
+          <td>{{ company.designation }}</td>
+          <td>{{ company.contactEmail }}</td>
+          <td>{{ company.contactPhone }}</td>
+          <td>
+            <label class="switch">
+              <input type="checkbox" [checked]="company.isActive" (change)="enableOrDisableClientCompany(company)">
+              <span class="slider"></span>
+            </label>
+          </td>
+          <td>
+            <button class="edit-button" (click)="editClientCompanyDetails(company.id)">Edit</button>
+            <button style="margin-top: 5px;" class="edit-button" [routerLink]="['/admin/jobs/list']"
+              [queryParams]="{ clientCompanyId: company.id}">View Jobs</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="paginator-wrapper" *ngIf="totalRecords > pageSize">
+    <div class="pagination-controls">
+      <label>Items per page:</label>
+      <select [value]="pageSize" (change)="onPageSizeChange($event)">
+        <option *ngFor="let size of [10, 20, 30, 50]" [value]="size">{{ size }}</option>
+      </select>
+
+      <span>{{ pageNumber * pageSize + 1 }} - {{ getEndItemIndex() }} of {{ totalRecords }}</span>
+
+      <button (click)="goToFirstPage()" [disabled]="pageNumber === 0">&laquo;</button>
+      <button (click)="goToPreviousPage()" [disabled]="pageNumber === 0">&lsaquo;</button>
+      <button (click)="goToNextPage()" [disabled]="pageNumber + 1 >= totalPages">&rsaquo;</button>
+      <button (click)="goToLastPage()" [disabled]="pageNumber + 1 >= totalPages">&raquo;</button>
+    </div>
+  </div>
+</div>

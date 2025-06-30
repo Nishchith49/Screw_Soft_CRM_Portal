@@ -1,0 +1,79 @@
+<div class="enquiries-container">
+  <div class="header">
+    <div class="header-left">
+      <div class="page-title">
+        <h2>Enquiries</h2>
+      </div>
+      <div class="breadcrumb">
+        <span><a routerLink="/admin/dashboard">Home</a></span>
+        <span class="separator">/</span>
+        <span>Enquiries</span>
+      </div>
+    </div>
+    <form [formGroup]="filterForm" class="header-right">
+      <input type="text" placeholder="Search..." class="search-input" formControlName="searchString" />
+      <button class="add-button" routerLink="/admin/jobs/add">Add</button>
+    </form>
+  </div>
+
+  <div *ngIf="isLoadingData" class="loading-page-ui">
+    <app-loading-page></app-loading-page>
+  </div>
+
+  <div *ngIf="isError && !isLoadingData" class="error-page-ui">
+    <app-error-page [errorData]="errorData"></app-error-page>
+  </div>
+
+  <div *ngIf="!isLoadingData && !isError" class="table-wrapper">
+    <table class="enquiry-table">
+      <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Resolved Date</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Enquiry Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let enquiry of enquiries; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ enquiry.name }}</td>
+          <td>{{ enquiry.email }}</td>
+          <td>{{ enquiry.phone }}</td>
+          <td>{{ enquiry.resolvedDate ? (enquiry.resolvedDate | date) : '-' }}</td>
+          <td>{{ enquiry.subject }}</td>
+          <td>{{ enquiry.message }}</td>
+          <td>{{ enquiry.createdDate | date}}</td>
+          <td>
+             <ng-container *ngIf="enquiry.isResolved; else notResolved">
+              <p>Resolved</p>
+            </ng-container>
+            <ng-template #notResolved>
+              <button class="resolve-button" (click)="resolveEnquiry(enquiry)" >Resolve</button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="paginator-wrapper" *ngIf="totalRecords > pageSize">
+    <div class="pagination-controls">
+      <label>Items per page:</label>
+      <select [value]="pageSize" (change)="onPageSizeChange($event)">
+        <option *ngFor="let size of [10, 20, 30, 50]" [value]="size">{{ size }}</option>
+      </select>
+
+      <span>{{ pageNumber * pageSize + 1 }} - {{ getEndItemIndex() }} of {{ totalRecords }}</span>
+
+      <button (click)="goToFirstPage()" [disabled]="pageNumber === 0">&laquo;</button>
+      <button (click)="goToPreviousPage()" [disabled]="pageNumber === 0">&lsaquo;</button>
+      <button (click)="goToNextPage()" [disabled]="pageNumber + 1 >= totalPages">&rsaquo;</button>
+      <button (click)="goToLastPage()" [disabled]="pageNumber + 1 >= totalPages">&raquo;</button>
+    </div>
+  </div>
+</div>

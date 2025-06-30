@@ -1,0 +1,32 @@
+<div class="upload-container">
+  <h2>Upload Image</h2>
+
+  <button class="choose-btn" (click)="fileCtrl.click()">📁 Choose File</button>
+
+  <div class="filename-card" *ngIf="fileName">
+    <p><strong>File Name:</strong> {{ fileName }}</p>
+  </div>
+
+  <input type="file" hidden accept="image/*" (change)="fileChangeEvent($event)" #fileCtrl />
+
+  <div class="crop-wrapper">
+    <div class="crop-column">
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="aspectRatio"
+        output="base64"
+        (imageCropped)="imageCropped($event)">
+      </image-cropper>
+    </div>
+
+    <div class="crop-column preview" *ngIf="croppedImage">
+      <img [src]="croppedImage" />
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="cancel-btn" (click)="croppedImage = ''">Cancel</button>
+    <button class="submit-btn" (click)="onSubmit()">Submit</button>
+  </div>
+</div>

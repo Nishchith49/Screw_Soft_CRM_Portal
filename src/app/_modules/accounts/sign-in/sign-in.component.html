@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="left-section">
+    <div class="overlay">
+      <h3>WELCOME TO</h3>
+      <h1>SCREW SOFT SOLUTIONS</h1>
+      <h2>CRM PORTAL</h2>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <div class="form-container">
+      <!-- <img src="icon.png" alt="Logo"> -->
+      <h3>Login</h3>
+
+      <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+        <label for="email">Email Id</label>
+        <input type="email" id="email" formControlName="emailId" placeholder="xyz@gmail.com">
+        <div class="error" *ngIf="signInForm.controls.emailId.touched && signInForm.controls.emailId.invalid">
+          <span *ngIf="signInForm.controls.emailId.errors?.['required']">Email is required.</span>
+          <span *ngIf="signInForm.controls.emailId.errors?.['email']">Please enter a valid email address.</span>
+        </div>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" placeholder="Enter your password">
+        <div class="error" *ngIf="signInForm.controls.password.touched && signInForm.controls.password.invalid">
+          <span *ngIf="signInForm.controls.password.errors?.['required']">Password is required.</span>
+        </div>
+
+        <button type="submit" id="submitBtn" [disabled]="isLoading">
+          {{ isLoading ? 'Please wait...' : 'Proceed To Login' }}
+          <span *ngIf="isLoading" class="spinner"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

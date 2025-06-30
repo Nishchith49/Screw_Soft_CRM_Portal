@@ -1,0 +1,59 @@
+<div class="job-form">
+    <h2 class="title">{{jobId ? 'Edit' : 'Add'}} Job</h2>
+    <div class="breadcrumb">
+        <span><a routerLink="/admin/dashboard">Home</a></span>
+        <span>/</span>
+        <span><a routerLink="/admin/jobs/list">Jobs</a></span>
+        <span>/</span>
+        <span>{{jobId ? 'Edit' : 'Add'}} Job</span>
+    </div>
+
+    <div class="form">
+        <form [formGroup]="addOrEditJobForm" (ngSubmit)="onSubmit()">
+            <div class="form-group" *ngFor="let field of [
+                { name: 'clientCompanyId', label: 'Client Company' },
+                { name: 'title', label: 'Job Title' },
+                { name: 'description', label: 'Job Description' },
+                { name: 'location', label: 'Location' },
+                { name: 'skillsRequired', label: 'Skills Required' },
+                { name: 'experienceRequired', label: 'Experience Required (Years)', type: 'number' },
+                { name: 'jobType', label: 'Job Type (e.g., Full-time)' },
+                { name: 'salary', label: 'Salary (₹)', type: 'number' },
+                { name: 'expiryDate', label: 'Expiry Date', type: 'date' }
+               ]">
+                <div *ngIf="field.name !== 'clientCompanyId'; else clientCompanyDropDown">
+                    <label [for]="field.name">{{ field.label }}<span class="text-warn">*</span></label>
+                    <ng-container *ngIf="field.name !== 'description'; else richTextEditor">
+                        <input [type]="field.type || 'text'" [formControlName]="field.name" [id]="field.name"
+                            class="form-control" />
+                    </ng-container>
+                    <ng-template #richTextEditor>
+                        <div class="editor-wrapper">
+                            <ngx-editor [editor]="editor" [formControlName]="field.name"
+                                [placeholder]="'Enter job description here...'" class="editor">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                                <hr />
+                            </ngx-editor>
+                        </div>
+                    </ng-template>
+                    <span *ngIf="f.get(field.name)?.errors?.['required'] && f.get(field.name)?.touched">
+                        {{ field.label }} is required.
+                    </span>
+                    <span *ngIf="f.get('expiryDate')?.errors?.['pastDate'] && f.get('expiryDate')?.touched">
+                        Expiry date must be today or later.
+                    </span>
+                </div>
+                <ng-template #clientCompanyDropDown>
+                    <label [for]="field.name">{{field.label}}<span class="text-warn">*</span></label>
+                    <select [formControlName]="field.name">
+                        <option value="" disabled selected>Select Client Company</option>
+                        <option *ngFor="let clientCompany of clientCompanies" [value]="clientCompany.value">
+                            {{clientCompany.label}}</option>
+                    </select>
+                </ng-template>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>

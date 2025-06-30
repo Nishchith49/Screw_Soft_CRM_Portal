@@ -1,0 +1,41 @@
+<div [ngClass]="miniMode ? 'sidebar-minimized' : 'sidebar-expanded'">
+  <div class="sidebar-header">
+    <span>{{ miniMode ? 'SSS' : 'SCREW SOFT SOLUTIONS' }}</span>
+  </div>
+
+  <hr />
+
+  <ul class="sidebar-menu">
+    <li *ngFor="let item of menuItems" class="menu-item">
+
+      <!-- Expandable Item -->
+      <ng-container *ngIf="item.isExpandable; else normalItem">
+        <div class="menu-link" (click)="toggleExpand(item)">
+          <span class="menu-icon material-icons">{{ item.icon }}</span>
+          <ng-container *ngIf="!miniMode">
+            <span>{{ item.title }}</span>
+            <span class="menu-arrow">{{ item.expanded ? '▾' : '▸' }}</span>
+          </ng-container>
+        </div>
+
+        <ul *ngIf="item.expanded" class="submenu">
+          <li *ngFor="let sub of item.items">
+            <a [routerLink]="sub.link" routerLinkActive="active">
+              <span class="menu-icon material-icons">{{ sub.icon }}</span>
+              <span *ngIf="!miniMode">{{ sub.title }}</span>
+            </a>
+          </li>
+        </ul>
+      </ng-container>
+
+      <!-- Regular Item -->
+      <ng-template #normalItem>
+        <a [routerLink]="item.link" routerLinkActive="active" class="menu-link">
+          <span class="menu-icon material-icons">{{ item.icon }}</span>
+          <span *ngIf="!miniMode">{{ item.title }}</span>
+        </a>
+      </ng-template>
+
+    </li>
+  </ul>
+</div>

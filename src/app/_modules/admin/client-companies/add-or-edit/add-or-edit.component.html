@@ -1,0 +1,45 @@
+<div class="client-form">
+  <h2 class="title">{{clientCompanyId ? 'Edit' : 'Add'}} Client Company</h2>
+  <div class="breadcrumb">
+    <span><a routerLink="/admin/dashboard">Home</a></span>
+    <span>/</span>
+    <span><a routerLink="/admin/client-companies/list">Client Companies</a></span>
+    <span>/</span>
+    <span>{{clientCompanyId ? 'Edit' : 'Add'}} Client Company</span>
+  </div>
+
+  <div class="form">
+    <form [formGroup]="addOrEditClientCompanyForm" (ngSubmit)="onSubmit()">
+      <div class="form-group" *ngFor="let field of [
+        { name: 'companyName', label: 'Company Name' },
+        { name: 'contactPersonName', label: 'Contact Person Name' },
+        { name: 'contactEmail', label: 'Contact Email', type: 'email' },
+        { name: 'contactPhone', label: 'Contact Number', type: 'number' },
+        { name: 'designation', label: 'Designation' },
+        { name: 'companyWebsite', label: 'Company Website' },
+        { name: 'linkedInProfile', label: 'LinkedIn Profile' },
+        { name: 'location', label: 'Location' },
+        { name: 'notes', label: 'Notes' }
+      ]">
+        <label [for]="field.name">
+          {{ field.label }}
+          <span *ngIf="isFieldRequired(field.name)" class="text-warn">*</span>
+        </label>
+        <input [type]="field.type || 'text'" [formControlName]="field.name" [id]="field.name" class="form-control" />
+        <span *ngIf="f.get(field.name)?.errors?.['required'] && f.get(field.name)?.touched">
+          {{ field.label }} is required.
+        </span>
+        <span
+          *ngIf="field.name === 'contactEmail' && f.get('contactEmail')?.errors?.['contactEmail'] && f.get('contactEmail')?.touched">
+          Enter a valid email address.
+        </span>
+        <span
+          *ngIf="field.name === 'contactPhone' && f.get('contactPhone')?.errors?.['pattern'] && f.get('contactPhone')?.touched">
+          Enter a valid 10-digit phone number.
+        </span>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>

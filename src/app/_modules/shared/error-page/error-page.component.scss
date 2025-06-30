@@ -1,0 +1,41 @@
+.error-container {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+
+  @media (min-width: 1280px) {
+    min-height: calc(100vh - 12.5vw);
+  }
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.error-image img {
+  width: 100%;
+  max-width: 120px;
+
+  @media (min-width: 1280px) {
+    max-width: 9.37vw;
+  }
+}
+
+.error-title h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.error-subtitle p {
+  font-size: 1rem;
+  color: #555;
+  margin: 0;
+}

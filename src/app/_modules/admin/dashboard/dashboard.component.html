@@ -1,0 +1,13 @@
+<div class="main-container">
+    <div class="dashboard-container">
+        <a class="dashboard-card" *ngFor="let item of dashboard" [routerLink]="item.link">
+            <div class="icon-box">
+                <span class="material-icons">{{ item.icon }}</span>
+            </div>
+            <div class="text-box">
+                <h3>{{ item.name | titlecase }}</h3>
+                <p>{{ item.count }}</p>
+            </div>
+        </a>
+    </div>
+</div>

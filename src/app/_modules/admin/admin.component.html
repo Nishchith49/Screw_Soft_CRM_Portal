@@ -1,0 +1,22 @@
+<div class="layout">
+  <nav 
+    [class.collapsed]="miniMode" 
+    [class.mobile]="isHandset$ | async" 
+    [class.open]="(isHandset$ | async) && showMobileSidebar">
+    <app-side-nav 
+      [miniMode]="miniMode" 
+      (SideNavClosed)="toggleSidebar()">
+    </app-side-nav>
+  </nav>
+
+  <div class="main" [ngClass]="miniMode ? 'mini' : 'normal'">
+    <app-header 
+      (toggle)="toggleSidebar()" 
+      (miniModeActivate)="toggleMiniMode()">
+    </app-header>
+
+    <div class="outlet">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

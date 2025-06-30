@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <div class="page-title">
+                <h2>Job Details</h2>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="view-button" [routerLink]="['/admin/applicants/list']" [queryParams]="{jobId:job?.id}">View
+                Applicants</button>
+        </div>
+    </div>
+
+    <div *ngIf="isLoadingData" class="loading-page-ui" fxLayoutAlign="center center">
+        <app-loading-page></app-loading-page>
+    </div>
+
+    <div *ngIf="!isLoadingData && job && !isError" class="job-details">
+        <!-- Summary Box -->
+        <div class="summary-box">
+            <div class="left-column">
+                <div class="summary-item">
+                    <span class="label">Job Title:</span>
+                    <span class="value">{{ job.title }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Experience:</span>
+                    <span class="value">{{ job.experienceRequired }}</span>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="summary-item">
+                    <span class="label">Location:</span>
+                    <span class="value">{{ job.location }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Education:</span>
+                    <span class="value">{{ job.education || 'Not specified' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description Box -->
+        <div class="description-box">
+            <h3>Job Description:</h3>
+            <p [innerHTML]="job.description"></p>
+            <!-- <ul *ngIf="job.description">
+                <li *ngFor="let point of job.description.split('\n')">{{ point }}</li>
+            </ul>
+            <p *ngIf="!job.description">No description available.</p> -->
+        </div>
+    </div>
+</div>

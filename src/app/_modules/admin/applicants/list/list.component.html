@@ -1,0 +1,107 @@
+<div class="applicants-container">
+  <div class="header">
+    <div class="header-left">
+      <div class="page-title">
+        <h2>Applicants</h2>
+      </div>
+      <div class="breadcrumb">
+        <span><a routerLink="/admin/dashboard">Home</a></span>
+        <span class="separator">/</span>
+        <span>Applicants</span>
+      </div>
+    </div>
+    <form [formGroup]="filterForm" class="header-right">
+      <select class="select-input" formControlName="clientCompanyId">
+        <option [ngValue]="null">All Client Companies</option>
+        <option *ngFor="let clientCompany of clientCompanyDropDown" [ngValue]="clientCompany.value">
+          {{clientCompany.label}}</option>
+      </select>
+      <select class="select-input" formControlName="jobId">
+        <option [ngValue]="null">All Jobs</option>
+        <option *ngFor="let job of jobDropDown" [ngValue]="job.id">
+          {{job.jobTitle}}</option>
+      </select>
+      <input type="text" placeholder="Search..." class="search-input" formControlName="searchString" />
+      <button class="add-button" routerLink="/admin/applicants/add">Add</button>
+    </form>
+  </div>
+
+  <div *ngIf="isLoadingData && !isError" class="loading-page-ui">
+    <app-loading-page></app-loading-page>
+  </div>
+
+  <div *ngIf="isError && !isLoadingData" class="error-page-ui">
+    <app-error-page [errorData]="errorData"></app-error-page>
+  </div>
+
+  <div *ngIf="!isLoadingData && !isError" class="table-wrapper">
+    <table class="applicant-table">
+      <thead>
+        <tr>
+          <th>Sl.No</th>
+          <th>Client Company Name</th>
+          <th>Job Title</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Applied Date</th>
+          <th>Resume</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let applicant of applicants; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ applicant.clientCompanyName }}</td>
+          <td>{{ applicant.jobTitle }}</td>
+          <td>{{ applicant.fullName }}</td>
+          <td>{{ applicant.email }}</td>
+          <td>{{ applicant.phone }}</td>
+          <td>{{ applicant.appliedDate | date}}</td>
+          <td>
+            <a [href]="applicant.resumeUrl" target="_blank" rel="noopener noreferrer">View Resume</a>
+          </td>
+          <td>
+            <div class="status-buttons">
+              <ng-container [ngSwitch]="applicant.status">
+                <ng-container [ngSwitch]="applicant.status">
+                  <ng-container *ngSwitchCase="1">
+                    <button style="background-color: green;" (click)="updateApplicantStatus(applicant.id!, 2)">Shortlist</button>
+                    <button style="margin-top: 5px;background-color: red;" (click)="updateApplicantStatus(applicant.id!, 3)">Reject</button>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="2">
+                    <button style="background-color: green;" (click)="updateApplicantStatus(applicant.id!, 4)">Hire</button>
+                    <button style="margin-top: 5px;background-color: red;" (click)="updateApplicantStatus(applicant.id!, 3)">Reject</button>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="3">
+                    <span class="rejected">Rejected</span>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="4">
+                    <span class="hired">Hired</span>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </td>
+          <td><button class="edit-button" (click)="editApplicantDetails(applicant.id)">Edit</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="paginator-wrapper" *ngIf="totalRecords > pageSize">
+    <div class="pagination-controls">
+      <label>Items per page:</label>
+      <select [value]="pageSize" (change)="onPageSizeChange($event)">
+        <option *ngFor="let size of [10, 20, 30, 50]" [value]="size">{{ size }}</option>
+      </select>
+
+      <span>{{ pageNumber * pageSize + 1 }} - {{ getEndItemIndex() }} of {{ totalRecords }}</span>
+
+      <button (click)="goToFirstPage()" [disabled]="pageNumber === 0">&laquo;</button>
+      <button (click)="goToPreviousPage()" [disabled]="pageNumber === 0">&lsaquo;</button>
+      <button (click)="goToNextPage()" [disabled]="pageNumber + 1 >= totalPages">&rsaquo;</button>
+      <button (click)="goToLastPage()" [disabled]="pageNumber + 1 >= totalPages">&raquo;</button>
+    </div>
+  </div>
+</div>

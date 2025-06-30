@@ -1,0 +1,23 @@
+<header class="header-bar">
+  <div class="header-left">
+    <button class="icon-button" (click)="handleSidebarToggle()" title="Toggle Sidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+
+  <div class="header-right">
+    <span class="username">Admin</span>
+    <div class="profile-dropdown" [class.open]="showMenu">
+      <button class="profile-button" (click)="toggleMenu()" title="User Menu">
+        <i class="fas fa-user"></i>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <button (click)="logout(); toggleMenu()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>

@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+  margin: 0;
+}
+* {
+  font-family: Roboto, sans-serif;
+}
+
+.snack-success {
+  background-color: #4caf50 !important; // Green
+  color: #fff !important;
+}
+
+.snack-error {
+  background-color: #f44336 !important; // Red
+  color: #fff !important;
+}

@@ -1,0 +1,15 @@
+export * from './accounts.service';
+import { AccountsService } from './accounts.service';
+export * from './applicants.service';
+import { ApplicantsService } from './applicants.service';
+export * from './clientCompanies.service';
+import { ClientCompaniesService } from './clientCompanies.service';
+export * from './courses.service';
+import { CoursesService } from './courses.service';
+export * from './dropDown.service';
+import { DropDownService } from './dropDown.service';
+export * from './enquiries.service';
+import { EnquiriesService } from './enquiries.service';
+export * from './jobs.service';
+import { JobsService } from './jobs.service';
+export const APIS = [AccountsService, ApplicantsService, ClientCompaniesService, CoursesService, DropDownService, EnquiriesService, JobsService];
