@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "generate-api": "openapi-generator-cli generate -i https://jobportal-qlsa.onrender.com/swagger/JobPortal%20Admin/swagger.json -g typescript-angular -o ./dotnet/openapi"
